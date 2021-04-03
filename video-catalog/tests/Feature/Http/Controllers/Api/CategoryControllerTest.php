@@ -44,18 +44,19 @@ class CategoryControllerTest extends TestCase
             'is_active' => 'a'
         ]));
         $this->assertMaxInvalidationRequired($response);
-        //$this->assertInvalidationRequiredBoolean($response);
+        $this->assertInvalidationRequiredBoolean($response);
 
         $category = factory(Category::class)->create();
-        $response = $this->json('PUT', route('categories.update', ['category' => $category->id], []));
+        $response = $this->json('PUT', route('categories.update', ['category' => $category->id]), []);
         $this->assertInvalidationRequired($response);
 
-        $response = $this->json('PUT', route('categories.update', ['category' => $category->id], [
+        $response = $this->json('PUT', route('categories.update', ['category' => $category->id]), 
+        [
             'name' => str_repeat('a', 256),
             'is_active' => 'a'
-        ]));
-        // $this->assertMaxInvalidationRequired($response);
-        // $this->assertInvalidationRequiredBoolean($response);
+        ]);
+        $this->assertMaxInvalidationRequired($response);
+        $this->assertInvalidationRequiredBoolean($response);
     }
 
     protected function assertInvalidationRequired(TestResponse $response)
@@ -85,7 +86,7 @@ class CategoryControllerTest extends TestCase
             ->assertStatus(422)
             ->assertJsonValidationErrors(['is_active'])
             ->assertJsonFragment([
-                \Lang::get('validation.boolean', ['attribute' => 'is_active']),
+                \Lang::get('validation.boolean', ['attribute' => 'is active']),
             ]);
     }
 
@@ -138,7 +139,6 @@ class CategoryControllerTest extends TestCase
         $response = $this->json('PUT', route('categories.update', ['category' => $category->id]), [
             'name' => 'test',
             'description' => '',
-            'is_active' => true
         ]);
         $response
             ->assertJsonFragment([

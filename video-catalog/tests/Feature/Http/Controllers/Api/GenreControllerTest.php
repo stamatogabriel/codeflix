@@ -39,23 +39,23 @@ class GenreControllerTest extends TestCase
         $response = $this->json('POST', route('genres.store', []));
         $this->assertInvalidationRequired($response);
 
-        $response = $this->json('POST', route('genres.store', [
+        $response = $this->json('POST', route('genres.store'), [
             'name' => str_repeat('a', 256),
             'is_active' => 'a'
-        ]));
+        ]);
         $this->assertMaxInvalidationRequired($response);
-        //$this->assertInvalidationRequiredBoolean($response);
+        $this->assertInvalidationRequiredBoolean($response);
 
         $genre = factory(Genre::class)->create();
-        $response = $this->json('PUT', route('genres.update', ['genre' => $genre->id], []));
+        $response = $this->json('PUT', route('genres.update', ['genre' => $genre->id]), []);
         $this->assertInvalidationRequired($response);
 
-        $response = $this->json('PUT', route('genres.update', ['genre' => $genre->id], [
+        $response = $this->json('PUT', route('genres.update', ['genre' => $genre->id]), [
             'name' => str_repeat('a', 256),
             'is_active' => 'a'
-        ]));
-        // $this->assertMaxInvalidationRequired($response);
-        // $this->assertInvalidationRequiredBoolean($response);
+        ]);
+        $this->assertMaxInvalidationRequired($response);
+        $this->assertInvalidationRequiredBoolean($response);
     }
 
     protected function assertInvalidationRequired(TestResponse $response)
@@ -85,7 +85,7 @@ class GenreControllerTest extends TestCase
             ->assertStatus(422)
             ->assertJsonValidationErrors(['is_active'])
             ->assertJsonFragment([
-                \Lang::get('validation.boolean', ['attribute' => 'is_active']),
+                \Lang::get('validation.boolean', ['attribute' => 'is active']),
             ]);
     }
 
