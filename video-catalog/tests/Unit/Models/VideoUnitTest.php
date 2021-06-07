@@ -2,28 +2,28 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Genre;
+use App\Models\Video;
 use PHPUnit\Framework\TestCase;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\Uuid;
 
-class GenreTest extends TestCase
+class VideoTest extends TestCase
 {
-    private $genre;
+    private $video;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->genre = new Genre();
+        $this->video = new Video();
     }
 
     public function testFillable()
     {
-        $fillable = ['name', 'is_active'];
+        $fillable = ['title', 'description', 'year_launched', 'opened', 'rating', 'duration'];
         $this->assertEquals(
             $fillable,
-            $this->genre->getFillable()
+            $this->video->getFillable()
         );
     }
 
@@ -32,33 +32,33 @@ class GenreTest extends TestCase
         $traits = [
             SoftDeletes::class, Uuid::class
         ];
-        $genreTraits = array_keys(class_uses(Genre::class));
-        $this->assertEquals($traits, $genreTraits);
+        $videoTraits = array_keys(class_uses(video::class));
+        $this->assertEquals($traits, $videoTraits);
     }
 
     public function testCasts()
-    {
-        $casts = ['id' => 'string', 'is_active' => 'boolean'];
+  {
+        $casts = ['id' => 'string', 'opened' => 'boolean', 'year_launched' => 'boolean', 'duration' => 'integer'];
         $this->assertEquals(
             $casts,
-            $this->genre->getCasts()
+            $this->video->getCasts()
         );
     }
 
     public function testIncrementing()
     {
-        $this->assertFalse($this->genre->incrementing);
+        $this->assertFalse($this->video->incrementing);
     }
 
     public function testDates()
     {
         $dates = ["created_at", "updated_at", "deleted_at"];
-        $genreDates = $this->genre->getDates();
+        $videoDates = $this->video->getDates();
 
         foreach($dates as $date) {
-            $this->assertContains($date, $genreDates);
+            $this->assertContains($date, $videoDates);
         };
-        
-        $this->assertCount(count($dates), $genreDates);
+     
+        $this->assertCount(count($dates), $videoDates);
     }
 }

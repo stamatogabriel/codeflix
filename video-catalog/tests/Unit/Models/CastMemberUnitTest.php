@@ -38,7 +38,7 @@ class CastMemberTest extends TestCase
 
     public function testCasts()
     {
-        $casts = ['id' => 'string'];
+        $casts = ['id' => 'string', 'type' => 'integer'];
         $this->assertEquals(
             $casts,
             $this->castMember->getCasts()
