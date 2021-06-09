@@ -38,7 +38,7 @@ class VideoTest extends TestCase
 
     public function testCasts()
   {
-        $casts = ['id' => 'string', 'opened' => 'boolean', 'year_launched' => 'boolean', 'duration' => 'integer'];
+        $casts = ['id' => 'string', 'opened' => 'boolean', 'year_launched' => 'integer', 'duration' => 'integer'];
         $this->assertEquals(
             $casts,
             $this->video->getCasts()
